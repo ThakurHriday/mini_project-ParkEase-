@@ -30,9 +30,28 @@ const LoginRegister = () => {
       } else {
         alert("Registration successful, please login!");
         setIsRegister(false);
+        setUsername("");
+        setPassword("");
+        setName("");
+        setEmail("");
+        setPhone("");
       }
     } catch (err) {
-      alert(err.response?.data?.message || "Error");
+      const errorMsg = err.response?.data?.message;
+
+      if (errorMsg) {
+        if (errorMsg.toLowerCase().includes("user not found")) {
+          alert("User does not exist. Please register first.");
+        } else if (errorMsg.toLowerCase().includes("invalid password")) {
+          alert("Incorrect password. Please try again.");
+        } else if (errorMsg.toLowerCase().includes("user already exists")) {
+          alert("Username is already taken. Try a different one.");
+        } else {
+          alert(errorMsg);
+        }
+      } else {
+        alert("Something went wrong. Please try again later.");
+      }
     }
   };
 
@@ -87,7 +106,14 @@ const LoginRegister = () => {
           />
           <button type="submit">{isRegister ? "Register" : "Login"}</button>
         </form>
-        <button className="toggle-button" onClick={() => setIsRegister(!isRegister)}>
+        <button className="toggle-button" onClick={() =>{ setIsRegister(!isRegister);
+          setUsername("");
+          setPassword("");
+          setName("");
+          setEmail("");
+          setPhone("");
+
+        }}>
           {isRegister ? "Already have an account? Login" : "Create an account"}
         </button>
       </div>
